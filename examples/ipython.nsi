@@ -21,10 +21,14 @@ SectionEnd
 Section "Start Menu shortcut"
   DetailPrint "Creating Windows Start Menu shortcuts."
 
+  Push "ipython-qtconsole"
+  Call EnvName
+  Pop $0  # environment name
+
   SetOutPath "$PROFILE"
   CreateShortcut "$SMPROGRAMS\IPython Console.lnk" \
-    "${ENVS}\_app_own_environment_ipython-qtconsole\pythonw.exe" \
-    "${ENVS}\_app_own_environment_ipython-qtconsole\Scripts\jupyter-qtconsole-script.py" \
-    "${ENVS}\_app_own_environment_ipython-qtconsole\Menu\IPython.ico" \
+    "${ENVS}\$0\pythonw.exe" \
+    "${ENVS}\$0\Scripts\jupyter-qtconsole-script.py" \
+    "${ENVS}\$0\Menu\IPython.ico" \
     0 "" "" "IPython Console (4.0.1)"
 SectionEnd
