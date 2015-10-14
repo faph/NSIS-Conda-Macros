@@ -6,17 +6,21 @@ OutFile "ipython.exe"
 RequestExecutionLevel user
 
 !insertmacro MUI_PAGE_WELCOME
+!define MUI_COMPONENTSPAGE_NODESC
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
 
-Section "Conda" section_conda
+
+Section "Conda package manager"
   !insertmacro InstallOrUpdateConda
 SectionEnd
 
-Section "IPython Application files" section_app
+
+Section "IPython Application files"
   !insertmacro InstallOrUpdateApp "ipython-qtconsole" ""
 SectionEnd
+
 
 Section "Start Menu shortcut"
   DetailPrint "Creating Windows Start Menu shortcuts."
