@@ -11,6 +11,7 @@ Combine the best of both worlds and distribute your conda package as a
 single-file installer. End-users don't need to install anaconda or miniconda
 first, they don't need to configure conda channels, nothing!
 
+
 Tell me what to do!
 -------------------
 
@@ -56,6 +57,7 @@ Behind the scenes, the macros do the usual stuff:
    supplied channel.
 5. If the prefix already exist the package is directly installed into it. This
    is suitable for updating a package.
+
 
 Our legal team is asking ...
 ----------------------------
