@@ -29,11 +29,9 @@
 
 
 !macro UpdateConda
-
   DetailPrint "Updating Conda ..."
   ExecDos::exec /DETAILED '"${CONDA}" update -y -q conda' "" ""
   !insertmacro _FinishMessage $0 "Conda update"
-
 !macroend
 
 
