@@ -1,4 +1,4 @@
-!include conda.nsh
+!include ..\conda.nsh
 
 Name "Test install or update Conda"
 OutFile "install_or_update_conda.exe"

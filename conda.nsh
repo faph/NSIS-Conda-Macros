@@ -4,7 +4,8 @@
 
 
 !define CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe
-!define ROOT_ENV $LOCALAPPDATA\Continuum\Miniconda3
+!define ROOT_ENV "$LOCALAPPDATA\Continuum\Miniconda3"
+!define ENVS "${ROOT_ENV}\envs"
 !define CONDA "${ROOT_ENV}\Scripts\conda"
 
 
@@ -46,6 +47,38 @@
     !insertmacro UpdateConda
 
   install_or_update_conda_end:
+!macroend
+
+
+!macro InstallApp package channel
+  DetailPrint "Downloading and installing application files ..."
+  ExecDos::exec /DETAILED '"${CONDA}" create -y -q \
+    -p "${ENVS}\_app_own_environment_${package}" \
+    -c ${channel} ${package}' "" ""
+  !insertmacro _FinishMessage $0 "Application files installation"
+!macroend
+
+
+!macro UpdateApp package channel
+  DetailPrint "Downloading and installing application update ..."
+  ExecDos::exec /DETAILED '"${CONDA}" install -y -q \
+    -p "${ENVS}\_app_own_environment_${package}" \
+    -c ${channel} ${package}' "" ""
+  !insertmacro _FinishMessage $0 "Application update"
+!macroend
+
+
+!macro InstallOrUpdateApp package channel
+  IfFileExists "${ENVS}\_app_own_environment_${package}\*.*" update_conda_app install_conda_app
+
+  install_conda_app:
+    !insertmacro InstallApp ${package} ${channel}
+    Goto install_or_update_conda_app_end
+
+  update_conda_app:
+    !insertmacro UpdateApp ${package} ${channel}
+
+  install_or_update_conda_app_end:
 !macroend
 
 
