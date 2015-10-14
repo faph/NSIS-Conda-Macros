@@ -31,6 +31,8 @@ SectionEnd
 
 ```
 
+For a complete example, see [this IPython installer](examples/ipython.nsi).
+
 Application versions can be specified as per conda conventions, for example:
 
 - `yourapp` (latest version available in channel)
