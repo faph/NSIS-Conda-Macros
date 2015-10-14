@@ -33,6 +33,8 @@ SectionEnd
 
 For a complete example, see [this IPython installer](examples/ipython.nsi).
 
+You’ll need NSIS, of course, as well as the plugins NSISdl and ExecDos.
+
 Application versions can be specified as per conda conventions, for example:
 
 - `yourapp` (latest version available in channel)
