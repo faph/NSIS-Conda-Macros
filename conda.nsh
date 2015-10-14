@@ -50,33 +50,42 @@
 !macroend
 
 
-!macro InstallApp package channel
+!macro InstallApp package args
   DetailPrint "Downloading and installing application files ..."
-  ExecDos::exec /DETAILED '"${CONDA}" create -y -q \
-    -p "${ENVS}\_app_own_environment_${package}" \
-    -c ${channel} ${package}' "" ""
+  Push ${package}
+  Call EnvName
+  Pop $0
+  ExecDos::exec /DETAILED '"${CONDA}" create -y -q ${args} \
+    -p "${ENVS}\$0" \
+    ${package}' "" ""
   !insertmacro _FinishMessage $0 "Application files installation"
 !macroend
 
 
-!macro UpdateApp package channel
+!macro UpdateApp package args
   DetailPrint "Downloading and installing application update ..."
-  ExecDos::exec /DETAILED '"${CONDA}" install -y -q \
-    -p "${ENVS}\_app_own_environment_${package}" \
-    -c ${channel} ${package}' "" ""
+  Push ${package}
+  Call EnvName
+  Pop $0
+  ExecDos::exec /DETAILED '"${CONDA}" install -y -q ${args} \
+    -p "${ENVS}\$0" \
+    ${package}' "" ""
   !insertmacro _FinishMessage $0 "Application update"
 !macroend
 
 
-!macro InstallOrUpdateApp package channel
-  IfFileExists "${ENVS}\_app_own_environment_${package}\*.*" update_conda_app install_conda_app
+!macro InstallOrUpdateApp package args
+  Push ${package}
+  Call EnvName
+  Pop $0
+  IfFileExists "${ENVS}\$0\*.*" update_conda_app install_conda_app
 
   install_conda_app:
-    !insertmacro InstallApp ${package} ${channel}
+    !insertmacro InstallApp ${package} "${args}"
     Goto install_or_update_conda_app_end
 
   update_conda_app:
-    !insertmacro UpdateApp ${package} ${channel}
+    !insertmacro UpdateApp ${package} "${args}"
 
   install_or_update_conda_app_end:
 !macroend
@@ -90,3 +99,19 @@
     Abort
   DetailPrint "${action} successfully completed."
 !macroend
+
+
+Function EnvName
+  Pop $0  # Package spec, e.g. appdirs=1.4.0=py33_0
+  StrCpy $1 0
+  loop:
+      IntOp $1 $1 + 1
+      StrCpy $2 $0 1 $1
+      StrCmp $2 '=' found
+      StrCmp $2 '' stop loop
+  found:
+      IntOp $1 $1 + 0
+  stop:
+  StrCpy $2 $0 $1
+  Push "_app_own_environment_$2"
+FunctionEnd

@@ -26,7 +26,7 @@ SectionEnd
 
 Section "Application files"
   !insertmacro InstallOrUpdateApp "yourapp=1.0.0" \
-    "https://anaconda.org/yourchannel"
+    "-c https://anaconda.org/yourchannel"
 SectionEnd
 
 ```
