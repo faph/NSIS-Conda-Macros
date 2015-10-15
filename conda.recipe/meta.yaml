@@ -1,0 +1,19 @@
+package:
+  name: nsis_conda
+  version: 0.1.0
+
+source:
+  git_url: ..
+
+requirements:
+  build:
+    - nsis_execdos
+  run:
+    - nsis_execdos
+
+about:
+  home: https://github.com/faph/NSIS-Conda-Macros
+  license: MIT
+  license_file: LICENSE
+  summary: Install conda applications using NSIS.
+  readme: README.md
