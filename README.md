@@ -15,7 +15,13 @@ first, they don't need to configure conda channels, nothing!
 Tell me what to do!
 -------------------
 
-In your NSIS installer source file do something like this:
+Asuming you have NSIS already, install the macros (as administrator):
+
+```cmd
+conda install -c nsis -p "c:\Program Files (x86)\NSIS" nsis_conda
+```
+
+Then, in your NSIS installer source file do something like this:
 
 ```nsis
 !include conda.nsh
@@ -31,9 +37,7 @@ SectionEnd
 
 ```
 
-For a complete example, see [this IPython installer](examples/ipython.nsi).
-
-You’ll need NSIS, of course, as well as the plugins NSISdl and ExecDos.
+Complete examples are in [the examples folder](examples/).
 
 Application versions can be specified as per conda conventions, for example:
 
