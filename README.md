@@ -38,6 +38,7 @@ You’ll need NSIS, of course, as well as the plugins NSISdl and ExecDos.
 Application versions can be specified as per conda conventions, for example:
 
 - `yourapp` (latest version available in channel)
+- `yourapp=1.0*`
 - `yourapp=1.0.0`
 - `yourapp=1.0.0=py34_0`
 
