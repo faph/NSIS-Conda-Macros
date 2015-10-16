@@ -38,6 +38,11 @@ Section "Application files"
     "-c https://anaconda.org/yourchannel"
 SectionEnd
 
+Section "Start Menu shortcut"
+  !insertmacro CreateShortcut "yourapp" "Your App Name" \
+    PY_GUI "Scripts\yourapp-script.py" "yourapp.ico"
+SectionEnd
+
 ```
 
 Complete examples are in [the examples folder](examples/).
