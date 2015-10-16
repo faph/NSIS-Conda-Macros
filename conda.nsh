@@ -17,12 +17,12 @@
   SetOutPath "$TEMP\conda_installer"
   DetailPrint "Downloading Conda ..."
   NSISdl::download /TIMEOUT=1800000 ${CONDA_URL} conda_setup.exe
-  !insertmacro _FinishMessage $R0 "Conda download"
+  !insertmacro _FinishMessage "Conda download"
 
   # Installing miniconda
   DetailPrint "Running Conda installer ..."
   ExecDos::exec /DETAILED '"$TEMP\conda_installer\conda_setup.exe" /S /D=${ROOT_ENV}"' "" ""
-  !insertmacro _FinishMessage $0 "Conda installation"
+  !insertmacro _FinishMessage "Conda installation"
 
   # Clean up
   SetOutPath "$TEMP"
@@ -34,7 +34,7 @@
 !macro UpdateConda
   DetailPrint "Updating Conda ..."
   ExecDos::exec /DETAILED '"${CONDA}" update -y -q conda' "" ""
-  !insertmacro _FinishMessage $0 "Conda update"
+  !insertmacro _FinishMessage "Conda update"
 !macroend
 
 
@@ -53,7 +53,7 @@
   Call Prefix
   Pop $0
   ExecDos::exec /DETAILED '"${CONDA}" create -y -q ${args} -p "$0" ${package}' "" ""
-  !insertmacro _FinishMessage $0 "Application files installation"
+  !insertmacro _FinishMessage "Application files installation"
 !macroend
 
 
@@ -63,7 +63,7 @@
   Call Prefix
   Pop $0
   ExecDos::exec /DETAILED '"${CONDA}" install -y -q ${args} -p "$0" ${package}' "" ""
-  !insertmacro _FinishMessage $0 "Application update"
+  !insertmacro _FinishMessage "Application update"
 !macroend
 
 
@@ -119,13 +119,15 @@
 !macroend
 
 
-!macro _FinishMessage v action
-  Pop ${v}
-  IntCmp ${v} 0 +4 0 0
+!macro _FinishMessage action
+  Pop $R0
+  ${If} $R0 = 0
+    DetailPrint "${action} successfully completed."
+  ${Else}
     MessageBox MB_OK|MB_ICONEXCLAMATION "${action} could not be completed."
-    DetailPrint "${action} could not be completed (exit code ${v})."
+    DetailPrint "${action} could not be completed (exit code $R0)."
     Abort
-  DetailPrint "${action} successfully completed."
+  ${EndIf}
 !macroend
 
 
