@@ -1,15 +1,18 @@
 package:
   name: nsis_conda
-  version: 0.1.0
+  version: 0.1.1
 
 source:
   git_url: ..
 
+build:
+  string: nsis_0
+
 requirements:
   build:
-    - nsis_execdos
+    - execdos
   run:
-    - nsis_execdos
+    - execdos
 
 about:
   home: https://github.com/faph/NSIS-Conda-Macros
