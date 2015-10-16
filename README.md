@@ -18,7 +18,7 @@ Tell me what to do!
 Create an NSIS environment and install the macros into it:
 
 ```cmd
-conda create -c nsis -n nsisenv conda_macros
+conda create -n nsisenv -c nsis conda_macros
 ```
 
 (Of course, if you have NSIS and plugins already you could also just take
