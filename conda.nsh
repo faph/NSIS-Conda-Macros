@@ -55,11 +55,9 @@
 !macro InstallApp package args
   DetailPrint "Downloading and installing application files ..."
   Push ${package}
-  Call EnvName
+  Call Prefix
   Pop $0
-  ExecDos::exec /DETAILED '"${CONDA}" create -y -q ${args} \
-    -p "${ENVS}\$0" \
-    ${package}' "" ""
+  ExecDos::exec /DETAILED '"${CONDA}" create -y -q ${args} -p "$0" ${package}' "" ""
   !insertmacro _FinishMessage $0 "Application files installation"
 !macroend
 
@@ -67,23 +65,20 @@
 !macro UpdateApp package args
   DetailPrint "Downloading and installing application update ..."
   Push ${package}
-  Call EnvName
+  Call Prefix
   Pop $0
-  ExecDos::exec /DETAILED '"${CONDA}" install -y -q ${args} \
-    -p "${ENVS}\$0" \
-    ${package}' "" ""
+  ExecDos::exec /DETAILED '"${CONDA}" install -y -q ${args} -p "$0" ${package}' "" ""
   !insertmacro _FinishMessage $0 "Application update"
 !macroend
 
 
 !macro InstallOrUpdateApp package args
   Push ${package}
-  Call EnvName
+  Call Prefix
   Pop $0
-  IfFileExists "${ENVS}\$0\*.*" update_conda_app install_conda_app
+  IfFileExists "$0\*.*" update_conda_app install_conda_app
 
-  install_conda_app:
-    !insertmacro InstallApp ${package} "${args}"
+  install_conda_app:    !insertmacro InstallApp ${package} "${args}"
     Goto install_or_update_conda_app_end
 
   update_conda_app:
@@ -97,28 +92,27 @@
   DetailPrint "Creating Windows Start Menu shortcut ..."
 
   Push ${package}
-  Call EnvName
-  Pop $0  # environment name
+  Call Prefix
+  Pop $0  # Prefix
 
   # Copy icon into PREFIX\Menu
-  SetOutPath "${ENVS}\$0\Menu"
+  SetOutPath "$0\Menu"
   File ${ico}
 
   ${Select} ${cmd}
     ${Case} "PY_CONSOLE"
-      StrCpy $R1 "${ENVS}\$0\python.exe"
-      StrCpy $R2 "${ENVS}\$0\${args}"
+      StrCpy $R1 "$0\python.exe"
+      StrCpy $R2 "$0\${args}"
     ${Case} "PY_GUI"
-      StrCpy $R1 "${ENVS}\$0\pythonw.exe"
-      StrCpy $R2 "${ENVS}\$0\${args}"
+      StrCpy $R1 "$0\pythonw.exe"
+      StrCpy $R2 "$0\${args}"
     ${CaseElse}
-      StrCpy $R1 "${ENVS}\$0\${cmd}"
+      StrCpy $R1 "$0\${cmd}"
       StrCpy $R2 "${args}"
   ${EndSelect}
 
   SetOutPath "$PROFILE"  # Shortcut working dir
-  CreateShortcut "$SMPROGRAMS\${title}.lnk" "$R1" "$R2" \
-    "${ENVS}\$0\Menu\${ico}" 0 "" "" "Open ${title}"
+  CreateShortcut "$SMPROGRAMS\${title}.lnk" "$R1" "$R2" "$0\Menu\${ico}" 0 "" "" "Open ${title}"
 
 !macroend
 
@@ -146,4 +140,12 @@ Function EnvName
   stop:
   StrCpy $2 $0 $1
   Push "_app_own_environment_$2"
+FunctionEnd
+
+
+Function Prefix
+  # Assumes package spec on stack
+  Call EnvName
+  Pop $0  # Env name
+  Push "${ENVS}\$0"
 FunctionEnd
