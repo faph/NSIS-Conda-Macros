@@ -117,6 +117,12 @@
 !macroend
 
 
+!macro DeleteShortcut title
+  DetailPrint "Deleting Windows Start Menu shortcut ..."
+  Delete "$SMPROGRAMS\${title}.lnk"
+!macroend
+
+
 !macro _FinishMessage v action
   Pop ${v}
   IntCmp ${v} 0 +4 0 0
