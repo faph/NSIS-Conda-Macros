@@ -99,6 +99,8 @@
   SetOutPath "$0\Menu"
   File ${ico}
 
+  Push $R1
+  Push $R2
   ${Select} ${cmd}
     ${Case} "PY_CONSOLE"
       StrCpy $R1 "$0\python.exe"
@@ -114,6 +116,8 @@
   SetOutPath "$PROFILE"  # Shortcut working dir
   CreateShortcut "$SMPROGRAMS\${title}.lnk" "$R1" "$R2" "$0\Menu\${ico}" 0 "" "" "Open ${title}"
 
+  Pop $R1
+  Pop $R2
 !macroend
 
 
