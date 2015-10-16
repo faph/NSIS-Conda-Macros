@@ -78,7 +78,8 @@
   Pop $0
   IfFileExists "$0\*.*" update_conda_app install_conda_app
 
-  install_conda_app:    !insertmacro InstallApp ${package} "${args}"
+  install_conda_app:
+    !insertmacro InstallApp ${package} "${args}"
     Goto install_or_update_conda_app_end
 
   update_conda_app:
