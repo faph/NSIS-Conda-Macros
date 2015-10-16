@@ -39,16 +39,11 @@
 
 
 !macro InstallOrUpdateConda
-  IfFileExists "${ROOT_ENV}\python.exe" update_conda install_conda
-
-  install_conda:
-    !insertmacro InstallConda
-    Goto install_or_update_conda_end
-
-  update_conda:
+  ${If} ${FileExists} "${ROOT_ENV}\python.exe"
     !insertmacro UpdateConda
-
-  install_or_update_conda_end:
+  ${Else}
+    !insertmacro InstallConda
+  ${EndIf}
 !macroend
 
 
@@ -76,16 +71,12 @@
   Push ${package}
   Call Prefix
   Pop $0
-  IfFileExists "$0\*.*" update_conda_app install_conda_app
 
-  install_conda_app:
-    !insertmacro InstallApp ${package} "${args}"
-    Goto install_or_update_conda_app_end
-
-  update_conda_app:
+  ${If} ${FileExists} "$0"
     !insertmacro UpdateApp ${package} "${args}"
-
-  install_or_update_conda_app_end:
+  ${Else}
+    !insertmacro InstallApp ${package} "${args}"
+  ${EndIf}
 !macroend
 
 
