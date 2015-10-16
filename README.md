@@ -15,10 +15,10 @@ first, they don't need to configure conda channels, nothing!
 Tell me what to do!
 -------------------
 
-Asuming you have NSIS already, install the macros (as administrator):
+Create an NSIS environment and install the macros into it:
 
 ```cmd
-conda install -c nsis -p "c:\Program Files (x86)\NSIS" nsis_conda
+conda create -c nsis -n nsisenv conda_macros
 ```
 
 Then, in your NSIS installer source file do something like this:
