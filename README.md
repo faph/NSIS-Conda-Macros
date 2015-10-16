@@ -21,6 +21,9 @@ Create an NSIS environment and install the macros into it:
 conda create -c nsis -n nsisenv conda_macros
 ```
 
+(Of course, if you have NSIS and plugins already you could also just take
+`conda.nsh` from the repo and drop it somewhere you like.)
+
 Then, in your NSIS installer source file do something like this:
 
 ```nsis
