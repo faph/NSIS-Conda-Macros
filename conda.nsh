@@ -1,7 +1,9 @@
 # Requires:
-#   - NSISdl
-#   - ExecDos
+# - NSISdl
+# - LogicLib
+# - ExecDos
 
+!include LogicLib.nsh
 
 !define CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe
 !define ROOT_ENV "$LOCALAPPDATA\Continuum\Miniconda3"
@@ -88,6 +90,36 @@
     !insertmacro UpdateApp ${package} "${args}"
 
   install_or_update_conda_app_end:
+!macroend
+
+
+!macro CreateShortcut package title cmd args ico
+  DetailPrint "Creating Windows Start Menu shortcut ..."
+
+  Push ${package}
+  Call EnvName
+  Pop $0  # environment name
+
+  # Copy icon into PREFIX\Menu
+  SetOutPath "${ENVS}\$0\Menu"
+  File ${ico}
+
+  ${Select} ${cmd}
+    ${Case} "PY_CONSOLE"
+      StrCpy $R1 "${ENVS}\$0\python.exe"
+      StrCpy $R2 "${ENVS}\$0\${args}"
+    ${Case} "PY_GUI"
+      StrCpy $R1 "${ENVS}\$0\pythonw.exe"
+      StrCpy $R2 "${ENVS}\$0\${args}"
+    ${CaseElse}
+      StrCpy $R1 "${ENVS}\$0\${cmd}"
+      StrCpy $R2 "${args}"
+  ${EndSelect}
+
+  SetOutPath "$PROFILE"  # Shortcut working dir
+  CreateShortcut "$SMPROGRAMS\${title}.lnk" "$R1" "$R2" \
+    "${ENVS}\$0\Menu\${ico}" 0 "" "" "Open ${title}"
+
 !macroend
 
 
