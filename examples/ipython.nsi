@@ -31,6 +31,7 @@ SectionEnd
 
 
 Section "Start Menu shortcut"
-  !insertmacro CreateShortcut "ipython-qtconsole" "IPython Console" \
-    PY_GUI "Scripts\jupyter-qtconsole-script.py" "IPython.ico"
+  !insertmacro CreateShortcut "IPython Console" \
+    "ipython-qtconsole" PY_GUI "Scripts\jupyter-qtconsole-script.py" \
+    "IPython.ico"
 SectionEnd

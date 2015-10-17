@@ -75,7 +75,7 @@
 !macroend
 
 
-!macro CreateShortcut package title cmd args ico
+!macro CreateShortcut title package cmd args ico
   DetailPrint "Creating Windows Start Menu shortcut ..."
 
   Push ${package}

@@ -41,8 +41,9 @@ Section "Application files"
 SectionEnd
 
 Section "Start Menu shortcut"
-  !insertmacro CreateShortcut "yourapp" "Your App Name" \
-    PY_GUI "Scripts\yourapp-script.py" "yourapp.ico"
+  !insertmacro CreateShortcut "Your App Name" \
+    "yourapp" PY_GUI "Scripts\yourapp-script.py" \
+    "app.ico"
 SectionEnd
 
 ```

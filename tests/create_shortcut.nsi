@@ -7,12 +7,12 @@ Page components
 Page instfiles
 
 Section "Shortcuts"
-  !insertmacro CreateShortcut "testpackage" "Test Python GUI" \
-    PY_GUI "Scripts\test-script.py" "app.ico"
+  !insertmacro CreateShortcut "Test Python GUI" \
+    "testpackage" PY_GUI "Scripts\test-script.py" "app.ico"
 
-  !insertmacro CreateShortcut "testpackage" "Test Python Console" \
-    PY_CONSOLE "Scripts\test-script.py" "app.ico"
+  !insertmacro CreateShortcut "Test Python Console" \
+    "testpackage" PY_CONSOLE "Scripts\test-script.py" "app.ico"
 
-  !insertmacro CreateShortcut "testpackage" "Test Command" \
-    "notepad" "c:\Windows\System32\drivers\etc\hosts" "app.ico"
+  !insertmacro CreateShortcut "Test Command" \
+    "testpackage" "notepad" "c:\Windows\System32\drivers\etc\hosts" "app.ico"
 SectionEnd
