@@ -15,19 +15,21 @@ first, they don't need to configure conda channels, nothing!
 Tell me what to do!
 -------------------
 
-Create an NSIS environment and install the macros into it:
-
-```cmd
-conda create -n nsisenv -c nsis conda_macros
-```
-
-(Of course, if you have NSIS and plugins already you could also just take
-`conda.nsh` from the repo and drop it somewhere you like.)
-
-Then, in your NSIS installer source file do something like this:
+In your NSIS installer source file do something like this:
 
 ```nsis
+# conda execute
+# env:
+#  - nsis
+#  - conda_macros
+#  - other_plugin
+# channels:
+#  - nsis
+# run_with: makensis
+
 !include conda.nsh
+
+# ... other required NSIS stuff
 
 Section "Conda package manager"
   !insertmacro InstallOrUpdateConda
@@ -45,7 +47,18 @@ SectionEnd
 
 ```
 
-Complete examples are in [the examples folder](examples/).
+Then use [conda execute](https://github.com/pelson/conda-execute) to compile
+the installer:
+
+```cmd
+conda execute yourinstaller.nsi
+```
+
+(Of course, if you have NSIS and plugins already you could also just take
+`conda.nsh` from the repo, drop it somewhere you like and compile the
+installer as usual.)
+
+More examples are in [the examples folder](examples/).
 
 Application versions can be specified as per conda conventions, for example:
 
