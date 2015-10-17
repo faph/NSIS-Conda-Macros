@@ -1,5 +1,13 @@
+# conda execute
+# env:
+#  - nsis
+#  - conda_macros
+# channels:
+#  - nsis
+# run_with: makensis
+
+!include conda.nsh
 !include MUI2.nsh
-!include ..\conda.nsh
 
 Name "IPython Console"
 OutFile "ipython.exe"

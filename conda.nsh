@@ -1,8 +1,3 @@
-# Requires:
-# - NSISdl
-# - LogicLib
-# - ExecDos
-
 !include LogicLib.nsh
 
 !define CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe
