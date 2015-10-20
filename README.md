@@ -25,7 +25,7 @@ In your NSIS installer source file do something like this:
 #  - other_plugin
 # channels:
 #  - nsis
-# run_with: makensis
+# run_with: ./makensis
 
 !include conda.nsh
 
@@ -81,7 +81,8 @@ Behind the scenes, the macros do the usual stuff:
    it’s the first installed Python on the system. Miniconda will be installed
    into `%LOCALAPPDATA%\Continuum\Miniconda3`.
 3. If Miniconda was previously installed, it will skip steps 1 and 2 do a
-   simple `conda update conda`.
+   simple `conda update conda`. It will only detect user-level installs of
+   miniconda.
 4. A conda environment is created in the python prefix
    `%LOCALAPPDATA%\Continuum\Miniconda3\envs\_app_own_environment_{package}`
    and the package is directly installed into this using the package spec and
