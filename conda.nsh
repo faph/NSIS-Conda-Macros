@@ -17,7 +17,7 @@ var CONDA     # Conda executable
 
   # Installing miniconda
   DetailPrint "Running Conda installer ..."
-  ExecDos::exec /DETAILED '"$TEMP\conda_installer\conda_setup.exe" /S /D=${ROOT_ENV}"' "" ""
+  ExecDos::exec /DETAILED '"$TEMP\conda_installer\conda_setup.exe" /S /D=$ROOT_ENV"' "" ""
   !insertmacro _FinishMessage "Conda installation"
 
   # Clean up
@@ -39,7 +39,7 @@ var CONDA     # Conda executable
 !macro InstallOrUpdateConda
   Call SetRootEnv
 
-  ${If} ${FileExists} "$ROOT_ENV\python.exe"
+  ${If} ${FileExists} "$ROOT_ENV\Scripts\conda.exe"
     !insertmacro UpdateConda
   ${Else}
     !insertmacro InstallConda
@@ -154,8 +154,6 @@ FunctionEnd
 
 
 Function Prefix
-  Call SetRootEnv
-
   # Assumes package spec on stack
   Call EnvName
   Pop $0  # Env name
@@ -164,17 +162,24 @@ FunctionEnd
 
 
 Function SetRootEnv
-  ${If} ${FileExists}     "$LOCALAPPDATA\Continuum\Miniconda3\python.exe"
-    StrCpy $ROOT_ENV      "$LOCALAPPDATA\Continuum\Miniconda3"
-  ${ElseIf} ${FileExists} "$PROFILE\Miniconda3\python.exe"
-    StrCpy $ROOT_ENV      "$PROFILE\Miniconda3"
-  ${ElseIf} ${FileExists} "$LOCALAPPDATA\Continuum\Miniconda\python.exe"
-    StrCpy $ROOT_ENV      "$LOCALAPPDATA\Continuum\Miniconda"
-  ${ElseIf} ${FileExists} "$PROFILE\Miniconda\python.exe"
-    StrCpy $ROOT_ENV      "$PROFILE\Miniconda"
-  ${Else}
-    StrCpy $ROOT_ENV      "$LOCALAPPDATA\Continuum\Miniconda3"
-  ${EndIf}
+  # List of paths to search
+  nsArray::SetList paths \
+    "$LOCALAPPDATA\Continuum\Miniconda3" \
+    "$PROFILE\Miniconda3" \
+    "$LOCALAPPDATA\Continuum\Miniconda" \
+    "$PROFILE\Miniconda" /end
+
+  nsArray::Get paths 0
+  Pop $ROOT_ENV  # first item as default
+
+  ${DoUntil} ${Errors}
+    nsArray::Iterate paths
+    Pop $0  # key
+    ${If} ${FileExists} "$1\Scripts\conda.exe"
+      Pop $ROOT_ENV  # value
+      ${ExitDo}
+    ${EndIf}
+  ${Loop}
 
   StrCpy $ENVS  "$ROOT_ENV\envs"
   StrCpy $CONDA "$ROOT_ENV\Scripts\conda"
