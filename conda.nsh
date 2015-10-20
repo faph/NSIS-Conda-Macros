@@ -1,12 +1,13 @@
 !include LogicLib.nsh
 
 !define CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe
-!define ROOT_ENV "$LOCALAPPDATA\Continuum\Miniconda3"
-!define ENVS "${ROOT_ENV}\envs"
-!define CONDA "${ROOT_ENV}\Scripts\conda"
+var ROOT_ENV  # Conda root environment
+var ENVS      # Path to all environments
+var CONDA     # Conda executable
 
 
 !macro InstallConda
+  Call SetRootEnv
 
   # Downloading miniconda
   SetOutPath "$TEMP\conda_installer"
@@ -27,14 +28,18 @@
 
 
 !macro UpdateConda
+  Call SetRootEnv
+
   DetailPrint "Updating Conda ..."
-  ExecDos::exec /DETAILED '"${CONDA}" update -y -q conda' "" ""
+  ExecDos::exec /DETAILED '"$CONDA" update -y -q conda' "" ""
   !insertmacro _FinishMessage "Conda update"
 !macroend
 
 
 !macro InstallOrUpdateConda
-  ${If} ${FileExists} "${ROOT_ENV}\python.exe"
+  Call SetRootEnv
+
+  ${If} ${FileExists} "$ROOT_ENV\python.exe"
     !insertmacro UpdateConda
   ${Else}
     !insertmacro InstallConda
@@ -43,26 +48,32 @@
 
 
 !macro InstallApp package args
+  Call SetRootEnv
+
   DetailPrint "Downloading and installing application files ..."
   Push ${package}
   Call Prefix
   Pop $0
-  ExecDos::exec /DETAILED '"${CONDA}" create -y -q ${args} -p "$0" ${package}' "" ""
+  ExecDos::exec /DETAILED '"$CONDA" create -y -q ${args} -p "$0" ${package}' "" ""
   !insertmacro _FinishMessage "Application files installation"
 !macroend
 
 
 !macro UpdateApp package args
+  Call SetRootEnv
+
   DetailPrint "Downloading and installing application update ..."
   Push ${package}
   Call Prefix
   Pop $0
-  ExecDos::exec /DETAILED '"${CONDA}" install -y -q ${args} -p "$0" ${package}' "" ""
+  ExecDos::exec /DETAILED '"$CONDA" install -y -q ${args} -p "$0" ${package}' "" ""
   !insertmacro _FinishMessage "Application update"
 !macroend
 
 
 !macro InstallOrUpdateApp package args
+  Call SetRootEnv
+
   Push ${package}
   Call Prefix
   Pop $0
@@ -143,8 +154,28 @@ FunctionEnd
 
 
 Function Prefix
+  Call SetRootEnv
+
   # Assumes package spec on stack
   Call EnvName
   Pop $0  # Env name
-  Push "${ENVS}\$0"
+  Push "$ENVS\$0"
+FunctionEnd
+
+
+Function SetRootEnv
+  ${If} ${FileExists}     "$LOCALAPPDATA\Continuum\Miniconda3\python.exe"
+    StrCpy $ROOT_ENV      "$LOCALAPPDATA\Continuum\Miniconda3"
+  ${ElseIf} ${FileExists} "$PROFILE\Miniconda3\python.exe"
+    StrCpy $ROOT_ENV      "$PROFILE\Miniconda3"
+  ${ElseIf} ${FileExists} "$LOCALAPPDATA\Continuum\Miniconda\python.exe"
+    StrCpy $ROOT_ENV      "$LOCALAPPDATA\Continuum\Miniconda"
+  ${ElseIf} ${FileExists} "$PROFILE\Miniconda\python.exe"
+    StrCpy $ROOT_ENV      "$PROFILE\Miniconda"
+  ${Else}
+    StrCpy $ROOT_ENV      "$LOCALAPPDATA\Continuum\Miniconda3"
+  ${EndIf}
+
+  StrCpy $ENVS  "$ROOT_ENV\envs"
+  StrCpy $CONDA "$ROOT_ENV\Scripts\conda"
 FunctionEnd
