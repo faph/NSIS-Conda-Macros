@@ -1,10 +1,10 @@
 # conda execute
 # env:
-#  - nsis
+#  - nsis 3.*
 #  - conda_macros
 # channels:
 #  - nsis
-# run_with: makensis
+# run_with: ./makensis
 
 !include conda.nsh
 !include MUI2.nsh
