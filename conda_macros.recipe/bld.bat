@@ -1,3 +1,7 @@
-if not exist "%PREFIX%\Include" mkdir "%PREFIX%\Include"
-copy "conda.nsh" "%PREFIX%\Include"
-if errorlevel 1 exit 1
+robocopy . "%PREFIX%\Include" conda.nsh
+if errorlevel 8 exit 1
+
+robocopy examples "%PREFIX%\Examples\CondaMacros"
+if errorlevel 8 exit 1
+
+exit 0
