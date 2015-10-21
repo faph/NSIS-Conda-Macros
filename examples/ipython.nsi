@@ -27,6 +27,7 @@ SectionEnd
 
 Section "IPython Application files"
   !insertmacro InstallOrUpdateApp "ipython-qtconsole" ""
+  !insertmacro WriteUninstaller "ipython-qtconsole"
 SectionEnd
 
 
