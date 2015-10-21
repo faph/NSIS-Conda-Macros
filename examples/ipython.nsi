@@ -35,3 +35,9 @@ Section "Start Menu shortcut"
     "ipython-qtconsole" PY_GUI "Scripts\jupyter-qtconsole-script.py" \
     "IPython.ico"
 SectionEnd
+
+
+Section "un.IPython"
+  !insertmacro DeleteApp "ipython-qtconsole"
+  !insertmacro DeleteShortcut "IPython Console"
+SectionEnd
