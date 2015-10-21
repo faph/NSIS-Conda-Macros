@@ -86,6 +86,18 @@ var CONDA     # Conda executable
 !macroend
 
 
+!macro DeleteApp package
+  Call SetRootEnv
+
+  DetailPrint "Deleting application files ..."
+
+  Push ${package}
+  Call Prefix
+  Pop $0
+  ExecDos::exec /DETAILED '"$CONDA" remove -y -q -p "$0" --all --offline' "" ""
+!macroend
+
+
 !macro CreateShortcut title package cmd args ico
   DetailPrint "Creating Windows Start Menu shortcut ..."
 
