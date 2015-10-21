@@ -87,12 +87,12 @@ var CONDA     # Conda executable
 
 
 !macro DeleteApp package
-  Call SetRootEnv
+  Call un.SetRootEnv
 
   DetailPrint "Deleting application files ..."
 
   Push ${package}
-  Call Prefix
+  Call un.Prefix
   Pop $0
   ExecDos::exec /DETAILED '"$CONDA" remove -y -q -p "$0" --all --offline' "" ""
 !macroend
@@ -126,8 +126,8 @@ var CONDA     # Conda executable
   SetOutPath "$PROFILE"  # Shortcut working dir
   CreateShortcut "$SMPROGRAMS\${title}.lnk" "$R1" "$R2" "$0\Menu\${ico}" 0 "" "" "Open ${title}"
 
-  Pop $R1
   Pop $R2
+  Pop $R1
 !macroend
 
 
@@ -149,50 +149,62 @@ var CONDA     # Conda executable
 !macroend
 
 
-Function EnvName
-  Pop $0  # Package spec, e.g. appdirs=1.4.0=py33_0
-  StrCpy $1 0
-  loop:
-      IntOp $1 $1 + 1
-      StrCpy $2 $0 1 $1
-      StrCmp $2 '=' found
-      StrCmp $2 '' stop loop
-  found:
-      IntOp $1 $1 + 0
-  stop:
-  StrCpy $2 $0 $1
-  Push "_app_own_environment_$2"
-FunctionEnd
+!macro EnvName un
+  Function ${un}EnvName
+    Pop $0  # Package spec, e.g. appdirs=1.4.0=py33_0
+    StrCpy $1 0
+    loop:
+        IntOp $1 $1 + 1
+        StrCpy $2 $0 1 $1
+        StrCmp $2 '=' found
+        StrCmp $2 '' stop loop
+    found:
+        IntOp $1 $1 + 0
+    stop:
+    StrCpy $2 $0 $1
+    Push "_app_own_environment_$2"
+  FunctionEnd
+!macroend
+!insertmacro EnvName ""
+!insertmacro EnvName un.
 
 
-Function Prefix
-  # Assumes package spec on stack
-  Call EnvName
-  Pop $0  # Env name
-  Push "$ENVS\$0"
-FunctionEnd
+!macro Prefix un
+  Function ${un}Prefix
+    # Assumes package spec on stack
+    Call ${un}EnvName
+    Pop $0  # Env name
+    Push "$ENVS\$0"
+  FunctionEnd
+!macroend
+!insertmacro Prefix ""
+!insertmacro Prefix un.
 
 
-Function SetRootEnv
-  # List of paths to search
-  nsArray::SetList paths \
-    "$LOCALAPPDATA\Continuum\Miniconda3" \
-    "$PROFILE\Miniconda3" \
-    "$LOCALAPPDATA\Continuum\Miniconda" \
-    "$PROFILE\Miniconda" /end
+!macro SetRootEnv un
+  Function ${un}SetRootEnv
+    # List of paths to search
+    nsArray::SetList paths \
+      "$LOCALAPPDATA\Continuum\Miniconda3" \
+      "$PROFILE\Miniconda3" \
+      "$LOCALAPPDATA\Continuum\Miniconda" \
+      "$PROFILE\Miniconda" /end
 
-  nsArray::Get paths 0
-  Pop $ROOT_ENV  # first item as default
+    nsArray::Get paths 0
+    Pop $ROOT_ENV  # first item as default
 
-  ${DoUntil} ${Errors}
-    nsArray::Iterate paths
-    Pop $0  # key
-    ${If} ${FileExists} "$1\Scripts\conda.exe"
-      Pop $ROOT_ENV  # value
-      ${ExitDo}
-    ${EndIf}
-  ${Loop}
+    ${DoUntil} ${Errors}
+      nsArray::Iterate paths
+      Pop $0  # key
+      ${If} ${FileExists} "$1\Scripts\conda.exe"
+        Pop $ROOT_ENV  # value
+        ${ExitDo}
+      ${EndIf}
+    ${Loop}
 
-  StrCpy $ENVS  "$ROOT_ENV\envs"
-  StrCpy $CONDA "$ROOT_ENV\Scripts\conda"
-FunctionEnd
+    StrCpy $ENVS  "$ROOT_ENV\envs"
+    StrCpy $CONDA "$ROOT_ENV\Scripts\conda"
+  FunctionEnd
+!macroend
+!insertmacro SetRootEnv ""
+!insertmacro SetRootEnv un.
