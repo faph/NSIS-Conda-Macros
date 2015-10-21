@@ -54,6 +54,8 @@ var CONDA     # Conda executable
   Push ${package}
   Call Prefix
   Pop $0
+  StrCpy $INSTDIR "$0"  # So we can use `$INSTDIR` later, if needed
+
   ExecDos::exec /DETAILED '"$CONDA" create -y -q ${args} -p "$0" ${package}' "" ""
   !insertmacro _FinishMessage "Application files installation"
 !macroend
@@ -66,6 +68,8 @@ var CONDA     # Conda executable
   Push ${package}
   Call Prefix
   Pop $0
+  StrCpy $INSTDIR "$0"  # So we can use `$INSTDIR` later, if needed
+
   ExecDos::exec /DETAILED '"$CONDA" install -y -q ${args} -p "$0" ${package}' "" ""
   !insertmacro _FinishMessage "Application update"
 !macroend
@@ -151,6 +155,8 @@ var CONDA     # Conda executable
 
 !macro EnvName un
   Function ${un}EnvName
+    # Return the app's environment name for a given package spec taken from the stack
+
     Pop $0  # Package spec, e.g. appdirs=1.4.0=py33_0
     StrCpy $1 0
     loop:
@@ -171,7 +177,8 @@ var CONDA     # Conda executable
 
 !macro Prefix un
   Function ${un}Prefix
-    # Assumes package spec on stack
+    # Return the prefix/path to the app's environment for a given package spec on the stack
+
     Call ${un}EnvName
     Pop $0  # Env name
     Push "$ENVS\$0"
@@ -183,6 +190,9 @@ var CONDA     # Conda executable
 
 !macro SetRootEnv un
   Function ${un}SetRootEnv
+    # Set the conda root environment prefix `$ROOT_ENV`, environments folder `$ENV` and conda
+    # executable `$CONDA`
+
     # List of paths to search
     nsArray::SetList paths \
       "$LOCALAPPDATA\Continuum\Miniconda3" \
