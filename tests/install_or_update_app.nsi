@@ -8,7 +8,7 @@ Page instfiles
 
 Section "Application files"
   !insertmacro InstallOrUpdateApp "appdirs=1.4.0=py33_0" "-c https://conda.anaconda.org/faph"
-  WriteUninstaller "$INSTDIR\uninstall.exe"
+  !insertmacro WriteUninstaller "appdirs"
 SectionEnd
 
 Section "un.Application files"

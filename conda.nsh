@@ -102,6 +102,19 @@ var CONDA     # Conda executable
 !macroend
 
 
+!macro WriteUninstaller package
+  # Creates an uninstaller in the package's environment
+
+  Call SetRootEnv
+
+  Push ${package}
+  Call Prefix
+  Pop $0
+
+  WriteUninstaller "$0\uninstall.exe"
+!macroend
+
+
 !macro CreateShortcut title package cmd args ico
   DetailPrint "Creating Windows Start Menu shortcut ..."
 
