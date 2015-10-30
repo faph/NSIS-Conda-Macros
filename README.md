@@ -25,7 +25,7 @@ In your NSIS installer source file do something like this:
 #  - other_plugin
 # channels:
 #  - nsis
-# run_with: ./makensis
+# run_with: makensis
 
 !include conda.nsh
 
