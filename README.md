@@ -8,7 +8,7 @@ Fact: [NSIS](http://sourceforge.net/projects/nsis/) is the best Windows
 application installer there is.
 
 Combine the best of both worlds and distribute your conda package as a
-single-file installer. End-users don't need to install anaconda or miniconda
+single-file installer. End-users don’t need to install anaconda or miniconda
 first, they don't need to configure conda channels, nothing!
 
 
@@ -22,7 +22,6 @@ In your NSIS installer source file do something like this:
 # env:
 #  - nsis
 #  - conda_macros
-#  - other_plugin
 # channels:
 #  - nsis
 # run_with: makensis
@@ -80,9 +79,9 @@ Behind the scenes, the macros do the usual stuff:
    user. That means Python will be registered and `PATH` variables set only if
    it’s the first installed Python on the system. Miniconda will be installed
    into `%LOCALAPPDATA%\Continuum\Miniconda3`.
-3. If Miniconda was previously installed, it will skip steps 1 and 2 do a
-   simple `conda update conda`. It will only detect user-level installs of
-   miniconda.
+3. If Miniconda was previously installed (it will look for conda in the user’s
+   profile folder), it will skip steps 1 and 2 do a simple `conda update
+   conda`. It will only detect user-level installs of miniconda.
 4. A conda environment is created in the python prefix
    `%LOCALAPPDATA%\Continuum\Miniconda3\envs\_app_own_environment_{package}`
    and the package is directly installed into this using the package spec and
