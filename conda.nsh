@@ -266,9 +266,13 @@ var CONDA     # Conda executable
     # List of paths to search
     nsArray::SetList paths \
       "$LOCALAPPDATA\Continuum\Miniconda3" \
-      "$PROFILE\Miniconda3" \
+      "$LOCALAPPDATA\Continuum\Anaconda3" \
       "$LOCALAPPDATA\Continuum\Miniconda" \
-      "$PROFILE\Miniconda" /end
+      "$LOCALAPPDATA\Continuum\Anaconda" \
+      "$PROFILE\Miniconda3" \
+      "$PROFILE\Anaconda3" \
+      "$PROFILE\Miniconda" \
+      "$PROFILE\Anaconda" /end
 
     # If it already exists, assume we've run this function before
     ${If} ${FileExists} "$ROOT_ENV\Scripts\conda.exe"
