@@ -37,6 +37,7 @@ SectionEnd
 Section "Application files"
   !insertmacro InstallOrUpdateApp "yourapp=1.0.0" \
     "-c https://anaconda.org/yourchannel"
+  !insertmacro WriteUninstaller "yourapp"
 SectionEnd
 
 Section "Start Menu shortcut"
@@ -45,6 +46,10 @@ Section "Start Menu shortcut"
     "app.ico"
 SectionEnd
 
+Section "un.Application"
+  !insertmacro DeleteApp "yourapp"
+  !insertmacro DeleteShortcut "Your App Name"
+SectionEnd
 ```
 
 Then use [conda execute](https://github.com/pelson/conda-execute) to compile
