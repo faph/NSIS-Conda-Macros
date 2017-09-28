@@ -16,7 +16,7 @@ var CONDA     # Conda executable
   # Downloading miniconda
   SetOutPath "$TEMP\conda_installer"
   DetailPrint "Downloading Conda ..."
-  NSISdl::download /TIMEOUT=1800000 ${CONDA_URL} conda_setup.exe
+  inetc::get /NOCANCEL /RESUME "" ${CONDA_URL} conda_setup.exe
   !insertmacro _FinishMessage "Conda download"
 
   # Installing miniconda
